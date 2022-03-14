@@ -6,7 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
+import 'package:mes_chaine_tv/drawerPage.dart';
 import 'package:mes_chaine_tv/search.dart';
 import 'package:mes_chaine_tv/tvPlayer.dart';
 
@@ -19,8 +21,28 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List apijson = [];
+  List names = []; // names we get from API
+  List filteredNames = [];
   var logger =Logger();
-  var dataUrl;
+  var dataUrl;final dio =  Dio();
+  void _getNames() async {
+    final response =
+    await dio.get('https://iptv-org.github.io/iptv/channels.json');
+    print(response.data);
+    List tempList = [];
+    for (int i = 0; i < response.data.length; i++) {
+      tempList.add(response.data[i]);
+    }
+    setState(() {
+      names = tempList;
+      filteredNames = names;
+    });
+
+    for (int i = 0; i < filteredNames.length; i++) {
+      logger.wtf('message',names[i]['categories'][0]['name']);
+
+    }
+  }
   Future<void> getall() async {
     bool loadRemoteDatatSucceed = false;
     try {
@@ -38,8 +60,10 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           dataUrl = jsonDecode(response.body);
         });
+        var rest = dataUrl as List;
 
-        logger.i("guide url",dataUrl);
+
+        logger.i("guide url",);
         // model= AlauneModel.fromJson(jsonDecode(response.body));
       } else {
 
@@ -54,7 +78,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     getall();
+    _getNames();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,DeviceOrientation.portraitDown]);
   }
   @override
@@ -84,6 +110,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: gridviewItem(),
+      drawer: DrawerPage(),
     );
   }
 
