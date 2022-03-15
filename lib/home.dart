@@ -28,8 +28,9 @@ class _HomePageState extends State<HomePage> {
   void _getNames() async {
     final response =
     await dio.get('https://iptv-org.github.io/iptv/channels.json');
-    print(response.data);
+    //print(response.data);
     List tempList = [];
+    List cat = [];
     for (int i = 0; i < response.data.length; i++) {
       tempList.add(response.data[i]);
     }
@@ -39,9 +40,15 @@ class _HomePageState extends State<HomePage> {
     });
 
     for (int i = 0; i < filteredNames.length; i++) {
-      logger.wtf('message',names[i]['categories'][0]['name']);
+      for(int j = 0; j < filteredNames.length; j++){
+
+        /*cat.add(names[j]);
+        logger.wtf('message ',names[j]);*/
+      }
+
 
     }
+
   }
   Future<void> getall() async {
     bool loadRemoteDatatSucceed = false;
@@ -124,6 +131,7 @@ class _HomePageState extends State<HomePage> {
       children: List.generate(dataUrl==null?0: dataUrl.length, (index) {
         return GestureDetector(
           onTap: (){
+            logger.wtf('message',dataUrl[index]['url']);
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => TVPlayerPage(
@@ -173,7 +181,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           width: MediaQuery.of(context).size.width,
-                          height: 100,
+                          height: 90,
                         ),
                       ),
                       /*Text(
@@ -224,7 +232,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(9.0),
             child: Container(
               width: MediaQuery.of(context).size.width,
-              height: 150,
+              height: 145,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -247,12 +255,12 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           width: MediaQuery.of(context).size.width,
-                          height: 150,
+                          height:145,
                         ),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        height: 150,
+                        height: 145,
                         decoration:  BoxDecoration(
                             image: const DecorationImage(
                               image: AssetImage('assets/images/carreImage.png'),

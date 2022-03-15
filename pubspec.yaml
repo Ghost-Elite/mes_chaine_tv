@@ -36,7 +36,7 @@ dependencies:
   retry: ^3.1.0
   dio: any
   google_fonts: ^2.2.0
-
+  webview_flutter_plus: ^0.3.0+2
 
 
 
